@@ -1,0 +1,71 @@
+#include "game_2048.h"
+
+static int	*merge(int *tab)
+{
+	if (tab[0] == tab[1] && tab[2] == tab[3])
+	{
+		tab[0] = 2 * tab[0];
+		tab[1] = 2 *tab[2];
+		tab[2] = 0;
+		tab[3] = 0;
+	}
+	else if (tab[0] == tab[1])
+	{
+		tab[0] = 2 * tab[0];
+		tab[1] = tab[2];
+		tab[2] = tab[3];
+		tab[3] = 0;
+	}
+	else if (tab[1] == tab[2])
+	{
+		tab[1] = 2 * tab[1];
+		tab[2] = tab[3];
+		tab[3] = 0;
+	}
+	else if (tab[2] == tab[3])
+	{
+		tab[2] = 2 * tab[2];
+		tab[3] = 0;
+	}
+	return (tab);
+}
+
+void			key_left_moove(t_window **window_tab)
+{
+	int		*tab;
+	int		i;
+	int		k;
+	int		j;
+
+
+	tab = (int *)malloc(sizeof(int) * 4);
+	i = 0;
+	while (i < 4)
+	{
+		k = 0;
+		j = 0;
+		while (j < 4)
+		{
+			if (window_tab[i][j].numb != 0)
+			{
+				tab[k] = window_tab[i][j].numb;
+				k++;
+			}
+			j++;
+		}
+		while (k < 4)
+		{
+			tab[k] = 0;
+			k++;
+		}
+		tab = merge(tab);
+		j = 0;
+		while (j < 4)
+		{
+			window_tab[i][j].numb = tab[j];
+			j++;
+		}
+		i++;
+	}
+	refresh_window_tab(window_tab);
+}
